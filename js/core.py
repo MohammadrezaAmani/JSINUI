@@ -71,6 +71,7 @@ class Or(BoolOp):
     def __init__(self, obj1=None, obj2=None, op=None) -> None:
         super().__init__(obj1, obj2, Constatant.Or)
 
-if __name__=='__main__':
+
+if __name__ == "__main__":
     obj = BuiltIn()
     print(repr(obj))
