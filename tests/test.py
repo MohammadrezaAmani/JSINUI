@@ -1,7 +1,10 @@
-from js.core import *
-
 import unittest
+import sys
+import os
 
+parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent_dir)
+from js.core import *
 
 class TestJs(unittest.TestCase):
     def test_builtin(self):
