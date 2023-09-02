@@ -31,22 +31,6 @@ class BuiltIn(object):
         self.args = args
         self.kwargs = kwargs
 
-    @property
-    def args(self):
-        return self.__args
-
-    @args.setter
-    def args(self, obj):
-        self.__args = convertType(obj)
-
-    @property
-    def kwargs(self):
-        return self.__kwargs
-
-    @kwargs.setter
-    def kwargs(self, val: str):
-        self.__kwargs = val
-
     def render(self):
         return self.renderClass()
 
@@ -280,7 +264,7 @@ class Op(BuiltIn):
 
     @obj1.setter
     def obj1(self, obj):
-        self.__obj1 = convertType(obj)
+        self.__obj1 = obj
 
     @property
     def op(self):
@@ -296,7 +280,7 @@ class Op(BuiltIn):
 
     @obj2.setter
     def obj2(self, obj):
-        self.__obj2 = convertType(obj)
+        self.__obj2 = obj
 
     @property
     def method(self):
@@ -2247,17 +2231,72 @@ class Await(BuiltIn):
         return f"await {str(self.obj)}"
 
 
-class AsyncDef(Async):
-    def __init__(self, name=None, args=None, body=None):
-        self.name = name
+class Return(BuiltIn):
+    def __init__(self, *args):
         self.args = args
-        self.body = body
+
+    @property
+    def args(self):
+        return self.__args
+
+    @args.setter
+    def args(self, obj):
+        if obj == None:
+            obj = ()
+        args = []
+        for i in obj:
+            args.append(str(convertType(i)))
+        self.__args = args
 
     def renderClass(self):
-        name_code = f" {str(self.name)}" if self.name else ""
-        args_code = f'({", ".join(str(arg) for arg in self.args)})' if self.args else ""
-        body_code = str(self.body) if self.body else ""
-        return f"async function{name_code}{args_code} {{\n{body_code}\n}}"
+        if len(self.args) == 0:
+            return f"return;"
+
+        return "return (" + ", ".join(i for i in self.args) + ");"
+
+
+class AsyncDef(Async):
+    def __init__(
+        self,
+        name=None,
+        extends=None,
+        body=None,
+        retu=None,
+        args=None,
+        kwargs=None,
+    ) -> None:
+        self.name = name
+        self.body = body if body != None else []
+        self.retur = retu
+        self.args = args
+        self.kwargs = kwargs
+
+    def renderClass(self):
+        if self.name == "__init__":
+            return self.constructor()
+        return str(
+            f"""async function {self.name}({self.renderArgs()}){Scope((*self.body, self.retur))}"""
+        )
+
+    def renderArgs(self):
+        args = ""
+        if self.args != None and len(self.args) > 0:
+            args = ", ".join([str(i) for i in self.args])
+        if self.kwargs != None and len(self.kwargs) > 0:
+            if self.args != None and len(self.args) > 0:
+                args = args + ", "
+            n = len(self.kwargs)
+            for key in self.kwargs:
+                args += f"{str(key)}={str(self.kwargs[key])}"
+                n -= 1
+                if n > 0:
+                    args += ","
+        return args
+
+    def constructor(self):
+        if "self" in self.args:
+            self.args.remove("self")
+        return f"""constructor({self.renderArgs()}){Scope(*self.body, self.retur)}"""
 
 
 class AsyncFor(Async):
@@ -2335,16 +2374,45 @@ class ClassInstance(Class):
 
 
 class Function(BuiltIn):
-    def __init__(self, name=None, args=None, body=None):
+    def __init__(
+        self,
+        name=None,
+        extends=None,
+        body=None,
+        args=None,
+        kwargs=None,
+    ) -> None:
         self.name = name
+        self.body = body if body != None else []
         self.args = args
-        self.body = body
+        self.kwargs = kwargs
 
     def renderClass(self):
-        name_code = f"{str(self.name)}" if self.name else ""
-        args_code = f'({", ".join(str(arg) for arg in self.args)})' if self.args else ""
-        body_code = str(self.body) if self.body else ""
-        return f"function {name_code}{args_code} {{\n{body_code}\n}}"
+        if self.name == "__init__":
+            return self.constructor()
+        return str(
+            f"""function {self.name}({self.renderArgs()}){Scope((*self.body,))}"""
+        )
+
+    def renderArgs(self):
+        args = ""
+        if self.args != None and len(self.args) > 0:
+            args = ", ".join([str(i) for i in self.args])
+        if self.kwargs != None and len(self.kwargs) > 0:
+            if self.args != None and len(self.args) > 0:
+                args = args + ", "
+            n = len(self.kwargs)
+            for key in self.kwargs:
+                args += f"{str(key)}={str(self.kwargs[key])}"
+                n -= 1
+                if n > 0:
+                    args += ","
+        return args
+
+    def constructor(self):
+        if "self" in self.args:
+            self.args.remove("self")
+        return f"""constructor({self.renderArgs()}){Scope(*self.body, self.retur)}"""
 
 
 class Method(BuiltIn):
@@ -2397,3 +2465,99 @@ class Bool(Type):
 
     def renderClass(self):
         return "true" if self.value else "false"
+
+
+class Call(BuiltIn):
+    def __init__(self, name=None, args=None, kwargs=None) -> None:
+        self.name = name
+        self.args = args
+        self.kwargs = kwargs if kwargs != None else {}
+
+    def renderClass(self):
+        return str(f"""{self.name}({self.renderArgs()})""")
+
+    def renderArgs(self):
+        args = ""
+        if self.args != None and len(self.args) > 0:
+            args = ", ".join([str(i) for i in self.args])
+        if self.kwargs != None and len(self.kwargs) > 0:
+            if self.args != None and len(self.args) > 0:
+                args = args + ", "
+            n = len(self.kwargs)
+            for key in self.kwargs:
+                args += f"{str(key)}={str(self.kwargs[key])}"
+                n -= 1
+                if n > 0:
+                    args += ","
+        return args
+
+
+class ImportStatement(BuiltIn):
+    def __init__(self, module_name=None):
+        self.module_name = module_name
+
+    def renderClass(self):
+        return f'import "{self.module_name}";'
+
+
+class FromImportStatement(BuiltIn):
+    def __init__(self, module_name=None, import_list=None):
+        self.module_name = module_name
+        self.import_list = import_list
+
+    def renderClass(self):
+        imports = ", ".join(self.import_list) if self.import_list else "*"
+        return f'import {{ {imports} }} from "{self.module_name}";'
+
+
+class While(BuiltIn):
+    def __init__(self, condition=None, body=None):
+        self.condition = condition
+        self.body = body
+
+    def renderClass(self):
+        condition_code = str(self.condition) if self.condition else ""
+        body_code = str(self.body) if self.body else ""
+        return f"while ({condition_code}) {{\n{body_code}\n}}"
+
+
+class For(BuiltIn):
+    def __init__(self, variable=None, iterable=None, body=None):
+        self.variable = variable
+        self.iterable = iterable
+        self.body = body
+
+    def renderClass(self):
+        variable_code = str(self.variable) if self.variable else ""
+        iterable_code = str(self.iterable) if self.iterable else ""
+        body_code = str(self.body) if self.body else ""
+        return f"for ({variable_code} of {iterable_code}) {{\n{body_code}\n}}"
+
+
+class If(BuiltIn):
+    def __init__(self, condition=None, body=None, else_body=None):
+        self.condition = condition
+        self.body = body
+        self.else_body = else_body
+
+    def renderClass(self):
+        condition_code = str(self.condition) if self.condition else ""
+        body_code = str(self.body) if self.body else ""
+        else_body_code = str(self.else_body) if self.else_body else ""
+        if_else_code = f"if ({condition_code}) {{\n{body_code}\n}}"
+        if else_body_code:
+            if_else_code += f" else {{\n{else_body_code}\n}}"
+        return if_else_code
+
+
+class AsyncFor(BuiltIn):
+    def __init__(self, variable=None, iterable=None, body=None):
+        self.variable = variable
+        self.iterable = iterable
+        self.body = body
+
+    def renderClass(self):
+        variable_code = str(self.variable) if self.variable else ""
+        iterable_code = str(self.iterable) if self.iterable else ""
+        body_code = str(self.body) if self.body else ""
+        return f"for await ({variable_code} of {iterable_code}) {{\n{body_code}\n}}"
