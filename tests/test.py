@@ -7,6 +7,7 @@ sys.path.append(parent_dir)
 from js.core import *
 
 class TestJs(unittest.TestCase):
+    
     def test_builtin(self):
         obj = BuiltIn()
         self.assertEqual(
@@ -15,16 +16,31 @@ class TestJs(unittest.TestCase):
             "Should be: BuiltIn({'args': (), 'kwargs': {}})",
         )
 
-    def test_and_constant(self):
+    def test_And_constant(self):
         self.assertEqual(
             And("me", "you").__str__(), '"me" && "you"', 'Should be: "me" && "you"'
         )
 
-    def test_and_variable(self):
+    def test_And_variable(self):
         me = "me"
         you = "you"
         self.assertEqual(
-            And(me, you).__str__(), '"me" && "you"', 'Should be: "me" && "you"'
+            And(me, you).__str__(), '("me" && "you")', 'Should be: ("me" && "you")'
+        )
+    def test_Or_constant(self):
+        self.assertEqual(
+            And("me", "you").__str__(), '("me" || "you")', 'Should be: ("me" || "you")'
+        )
+
+    def test_Or_variable(self):
+        me = 1
+        you = 2
+        self.assertEqual(
+            And(me, you).__str__(), '(1 || 2)', 'Should be: (1 || 2)'
+        )
+    def test_Not_variable(self):
+        self.assertEqual(
+            Not(Or(1,2)).__str__(), '!((1 || 2))', 'Should be: !((1 || 2))'
         )
 
 
