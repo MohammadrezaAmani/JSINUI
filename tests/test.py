@@ -121,8 +121,6 @@ class TestBitwiseOp(unittest.TestCase):
         self.assertEqual(bitinvert_op.render(), "(~5)")
 
 
-import unittest
-
 # Import the Scope class from your_module
 
 
@@ -224,6 +222,137 @@ class TestVar(unittest.TestCase):
         self.assertEqual(str(var), expected_result)
 
 
+# Import the classes you want to test
+class TestPythonToJavaScriptConversion(unittest.TestCase):
+    def test_iterator(self):
+        # Test Iterator class
+        iterable = [1, 2, 3]
+        js_code = Iterator(iterable).renderClass()
+        expected_js = "[1, 2, 3][Symbol.iterator]()"
+        self.assertEqual(js_code, expected_js)
+
+    def test_generator(self):
+        # Test Generator class
+        generator_func = "yield 1; yield 2;"
+        js_code = Generator(generator_func).renderClass()
+        expected_js = "function* () {\nyield 1; yield 2;\n}"
+        self.assertEqual(js_code, expected_js)
+
+    def test_list(self):
+        # Test List class
+        elements = [1, 2, 3]
+        js_code = List(elements).renderClass()
+        expected_js = "[1, 2, 3]"
+        self.assertEqual(js_code, expected_js)
+
+    def test_tuple(self):
+        # Test Tuple class
+        elements = (1, 2, 3)
+        js_code = Tuple(elements).renderClass()
+        expected_js = "[1, 2, 3]"
+        self.assertEqual(js_code, expected_js)
+
+    def test_range(self):
+        # Test Range class
+        start = 1
+        stop = 6
+        step = 2
+        js_code = Range(start, stop, step).renderClass()
+        expected_js = "Array.from(1, 6, 2)"
+        self.assertEqual(js_code, expected_js)
+
+    def test_immutable_sequence(self):
+        # Test ImmutableSequence class
+        elements = [1, 2, 3]
+        js_code = ImmutableSequence(elements).renderClass()
+        expected_js = "Object.freeze([1, 2, 3])"
+        self.assertEqual(js_code, expected_js)
+
+    def test_binary_sequence(self):
+        # Test BinarySequence class
+        binary_str = "1010"
+        js_code = BinarySequence(binary_str).renderClass()
+        expected_js = 'parseInt("1010", 2)'
+        self.assertEqual(js_code, expected_js)
+
+    def test_bytes(self):
+        # Test Bytes class
+        bytes_value = b"Hello, World!"
+        js_code = Bytes(bytes_value).renderClass()
+        expected_js = "new Uint8Array([72, 101, 108, 108, 111, 44, 32, 87, 111, 114, 108, 100, 33])"
+        self.assertEqual(js_code, expected_js)
+
+    def test_bytes_array(self):
+        # Test BytesArray class
+        elements = [65, 66, 67]
+        js_code = BytesArray(elements).renderClass()
+        expected_js = "new Uint8Array([65, 66, 67])"
+        self.assertEqual(js_code, expected_js)
+
+    def test_memory_view(self):
+        # Test MemoryView class
+        buffer_obj = "new ArrayBuffer(8)"
+        js_code = MemoryView(buffer_obj).renderClass()
+        expected_js = "new DataView(new ArrayBuffer(8))"
+        self.assertEqual(js_code, expected_js)
+
+    def test_string_format(self):
+        # Test StringFormat class
+        format_str = "Hello, {}!"
+        args = ("world",)
+        js_code = StringFormat(format_str, args).renderClass()
+        expected_js = '`Hello, ${"world"}!`.format(world)'
+        self.assertEqual(js_code, expected_js)
+
+    def test_set(self):
+        # Test Set class
+        elements = [1, 2, 3]
+        js_code = Set(elements).renderClass()
+        expected_js = "new Set([1, 2, 3])"
+        self.assertEqual(js_code, expected_js)
+
+    def test_frozen_set(self):
+        # Test FrozenSet class
+        elements = [1, 2, 3]
+        js_code = FrozenSet(elements).renderClass()
+        expected_js = "new Set([1, 2, 3])"
+        self.assertEqual(js_code, expected_js)
+
+    def test_dict(self):
+        # Test Dict class
+        key_value_pairs = {"a": 1, "b": 2, "c": 3}
+        js_code = Dict(key_value_pairs).renderClass()
+        expected_js = '{"a": 1, "b": 2, "c": 3}'
+        self.assertEqual(js_code, expected_js)
+
+    def test_union_type(self):
+        # Test UnionType class
+        types = ["number", "string"]
+        js_code = UnionType(types).renderClass()
+        expected_js = "number | string"
+        self.assertEqual(js_code, expected_js)
+
+
+class TestZip(unittest.TestCase):
+    def test_zip_render(self):
+        # Create some example iterable objects
+        list1 = [1, 2, 3]
+        list2 = ["a", "b", "c"]
+        tuple1 = (10, 20, 30)
+
+        # Create a Zip object
+        zip_obj = Zip(list1, list2, tuple1)
+
+        # Render the Zip object
+        rendered_code = zip_obj.render()
+
+        # Define the expected JavaScript code
+        expected_code = 'Array.from([1, 2, 3, "a", "b", "c", [10, 20, 30]]).map((_,i)=>[_[i], _[i+3], _[i+6]])'
+
+        # Assert that the rendered code matches the expected code
+        self.assertEqual(rendered_code, expected_code)
+
+
 if __name__ == "__main__":
     tect = unittest.main(exit=False)
     with open("./issues/README.md", "w") as f:
@@ -233,7 +362,6 @@ if __name__ == "__main__":
             last test of JSINUI module, we are trying to\
             fix them as soon as possible.\n\n------\n\n"
         )
-
         f.write("### Failures: \n\n")
         for i in tect.result.failures.copy():
             f.write("``` python\n")
