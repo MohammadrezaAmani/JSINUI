@@ -104,7 +104,7 @@ class PythonToJavaScriptConverter(ast.NodeVisitor):
 
     def visit_ClassDef(self, node):
         class_name = node.name
-        bases = ", ".join([self.visit(base) for base in node.bases])
+        bases = [self.visit(base) for base in node.bases]
         js_code = []
         for stmt in node.body:
             js_stmt = self.visit(stmt)
