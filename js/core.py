@@ -9,23 +9,21 @@ class Constatant:
     And = "&&"
     Or = "||"
     Not = "!"
-    Add = '+'
-    Sub = '-'
-    Mult = '*'
-    Div = '/'
-    FloorDiv = 'Math.floor'
-    Pow = 'Math.pow'
-    Mod = '%'
-    BitAnd = '&'
-    BitOr = '|'
-    BitXor = '^'
-    LShift = '<<'
-    RShift = '>>'
-    Negative = '-'
-    Posetive = '+'
-    BitInvert = '~'
-    
-    
+    Add = "+"
+    Sub = "-"
+    Mult = "*"
+    Div = "/"
+    FloorDiv = "Math.floor"
+    Pow = "Math.pow"
+    Mod = "%"
+    BitAnd = "&"
+    BitOr = "|"
+    BitXor = "^"
+    LShift = "<<"
+    RShift = ">>"
+    Negative = "-"
+    Posetive = "+"
+    BitInvert = "~"
 
 
 class BuiltIn(object):
@@ -33,11 +31,27 @@ class BuiltIn(object):
         self.args = args
         self.kwargs = kwargs
 
+    @property
+    def args(self):
+        return self.__args
+
+    @args.setter
+    def args(self, obj):
+        self.__args = convertType(obj)
+
+    @property
+    def kwargs(self):
+        return self.__kwargs
+
+    @kwargs.setter
+    def kwargs(self, val: str):
+        self.__kwargs = val
+
     def render(self):
         return self.renderClass()
 
     def renderClass(self):
-        return str(self.__dict__)
+        return str(self.args)
 
     def __str__(self) -> str:
         return self.render()
@@ -230,6 +244,7 @@ class Str(Type, str):
 
 
 class Complex(Type):
+    #! implement this class
     def __init__(self, obj=None) -> None:
         super().__init__(obj)
 
@@ -241,102 +256,144 @@ class Op(BuiltIn):
         self.method = method
         self.aug = aug
         self.op = op
-    
-    @property 
+
+    @property
     def obj1(self):
         return self.__obj1
+
     @obj1.setter
     def obj1(self, obj):
         self.__obj1 = convertType(obj)
-        
-    @property 
+
+    @property
     def op(self):
         return self.__op
+
     @op.setter
-    def op(self, val:str):
+    def op(self, val: str):
         self.__op = val
-        
-    @property 
+
+    @property
     def obj2(self):
         return self.__obj2
+
     @obj2.setter
     def obj2(self, obj):
         self.__obj2 = convertType(obj)
-        
-    @property 
+
+    @property
     def method(self):
         return self.__method
+
     @method.setter
-    def method(self, val:str):
+    def method(self, val: str):
         self.__method = val
-        
-    @property 
+
+    @property
     def aug(self):
         return self.__aug
+
     @aug.setter
-    def aug(self, val:bool):
+    def aug(self, val: bool):
         self.__aug = val
-        
+
     def renderClass(self):
-        render_text = ''
+        render_text = ""
         if self.obj2 == None:
-            render_text = f'({self.op}{self.obj1})'
+            render_text = f"({self.op}{self.obj1})"
         elif self.aug:
             if self.method:
-                render_text = f'{self.obj1} = {self.op}({self.obj1},{self.obj2})'
+                render_text = f"{self.obj1} = {self.op}({self.obj1},{self.obj2})"
             else:
-                render_text = f'{self.obj1} {self.op}= {self.obj2}'
+                render_text = f"{self.obj1} {self.op}= {self.obj2}"
         else:
             if self.method:
-                render_text = f'{self.op}({self.obj1},{self.obj2})'
+                render_text = f"{self.op}({self.obj1},{self.obj2})"
             else:
-                render_text = f'({self.obj1} {self.op} {self.obj2})'
+                render_text = f"({self.obj1} {self.op} {self.obj2})"
 
         return render_text
 
+
 class Add(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Add,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Add,
+        )
 
 
 class Sub(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Sub,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Sub,
+        )
 
 
 class Mult(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Mult,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Mult,
+        )
 
 
 class Div(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Div,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Div,
+        )
 
 
 class FloorDiv(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.FloorDiv,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.FloorDiv,
+        )
 
 
 class Mod(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Mod,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Mod,
+        )
 
 
 class Pow(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Pow,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Pow,
+        )
 
 
 class Negative(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Negative,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Negative,
+        )
 
 
 class Posetive(Op):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.Posetive,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.Posetive,
+        )
 
 
 class BitwiseOp(Op):
@@ -346,32 +403,128 @@ class BitwiseOp(Op):
 
 class LShift(BitwiseOp):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.LShift,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.LShift,
+        )
 
 
 class RShift(BitwiseOp):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.RShift,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.RShift,
+        )
 
 
 class BitAnd(BitwiseOp):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.BitAnd,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.BitAnd,
+        )
 
 
 class BitOr(BitwiseOp):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.BitOr,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.BitOr,
+        )
 
 
 class BitXor(BitwiseOp):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2,Constatant.BitXor,)
+        super().__init__(
+            obj1,
+            obj2,
+            Constatant.BitXor,
+        )
 
 
 class BitInvert(BitwiseOp):
     def __init__(self, obj1=None) -> None:
-        super().__init__(obj1, obj2=None ,op=Constatant.BitInvert,)
+        super().__init__(
+            obj1,
+            obj2=None,
+            op=Constatant.BitInvert,
+        )
 
-if __name__ == "__main__":
-    print(Not(And(4, 2)))
+
+class Scope(BuiltIn):
+    def __init__(self, childs=None, indent=4) -> None:
+        self.childs = childs
+        self.indent = int(indent)
+
+    @property
+    def childs(self):
+        return self.__childs
+
+    @childs.setter
+    def childs(self, args):
+        if args == None:
+            args = ()
+
+        elif type(args) not in [list, set, tuple]:
+            args = tuple(args)
+        self.__childs = args
+
+    def renderClass(self):
+        childs = ""
+        for i in self.childs:
+            childs += "\n" + (self.indent * " ") + str(i)
+        return "{\n%s\n}" % (childs)
+
+
+class Assign(BuiltIn):
+    def __init__(self, variableName=None, value=None, assigntype="") -> None:
+        self.variableName = variableName
+        self.value = value
+        self.assigntype = assigntype
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, val):
+        self.__value = convertType(val)
+
+    @property
+    def variableName(self):
+        return self.__variableName
+
+    @variableName.setter
+    def variableName(self, name: str):
+        name = str(name)
+        name = name.strip()
+        if len(name) == 0:
+            raise BaseException("invalid name")
+        self.__variableName = name
+
+    def __str__(self) -> str:
+        if self.value == None:
+            return "%s %s;" % (self.assigntype, self.variableName)
+        return "%s %s = %s;" % (self.assigntype, self.variableName, self.value)
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class Const(Assign):
+    def __init__(self, variableName=None, value=None) -> None:
+        super().__init__(variableName, value, "const")
+
+
+class Let(Assign):
+    def __init__(self, variableName=None, value=None):
+        super().__init__(variableName, value, "let")
+
+
+class Var(Assign):
+    def __init__(self, variableName=None, value=None) -> None:
+        super().__init__(variableName, value, "var")

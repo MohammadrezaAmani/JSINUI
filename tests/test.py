@@ -71,10 +71,11 @@ class TestType(unittest.TestCase):
     def test_str_type(self):
         str_type = Str("Hello, World!")
         self.assertEqual(str_type.render(), '"Hello, World!"')
+
     def test_str_type(self):
         str_type = Str("Hello,\n World!")
-        self.assertEqual(str_type.render(), '`Hello,\n World!`')
-        
+        self.assertEqual(str_type.render(), "`Hello,\n World!`")
+
     def test_complex_type(self):
         complex_type = Complex(1 + 2j)
         self.assertEqual(complex_type.render(), "(1+2j)")
@@ -118,6 +119,109 @@ class TestBitwiseOp(unittest.TestCase):
     def test_bitinvert(self):
         bitinvert_op = BitInvert(5)
         self.assertEqual(bitinvert_op.render(), "(~5)")
+
+
+import unittest
+
+# Import the Scope class from your_module
+
+
+class TestScope(unittest.TestCase):
+    def test_empty_scope(self):
+        scope = Scope()
+        expected_result = "{\n\n}"
+        self.assertEqual(scope.render(), expected_result)
+
+    def test_scope_with_children(self):
+        child1 = BuiltIn("Child1")
+        child2 = BuiltIn("Child2")
+        scope = Scope([child1, child2], indent=2)
+        expected_result = "{\n  Child1\n  Child2\n}"
+        self.assertEqual(scope.render(), expected_result)
+
+    def test_scope_with_different_indent(self):
+        child1 = BuiltIn("Child1")
+        child2 = BuiltIn("Child2")
+        scope = Scope([child1, child2], indent=4)
+        expected_result = "{\n    Child1\n    Child2\n}"
+        self.assertEqual(scope.render(), expected_result)
+
+    def test_scope_with_tuple_children(self):
+        child1 = BuiltIn("Child1")
+        child2 = BuiltIn("Child2")
+        scope = Scope((child1, child2))
+        expected_result = "{\n  Child1\n  Child2\n}"
+        self.assertEqual(scope.render(), expected_result)
+
+    def test_scope_with_set_children(self):
+        child1 = BuiltIn("Child1")
+        child2 = BuiltIn("Child2")
+        scope = Scope({child1, child2})
+        expected_result = "{\n  Child1\n  Child2\n}"
+        self.assertEqual(scope.render(), expected_result)
+
+    def test_scope_with_mixed_children(self):
+        child1 = BuiltIn("Child1")
+        child2 = BuiltIn("Child2")
+        scope = Scope([child1, child2], indent=2)
+        expected_result = "{\n  Child1\n  Child2\n}"
+        self.assertEqual(scope.render(), expected_result)
+
+    # Add more test cases as needed
+
+
+import unittest
+
+# Import the classes from your_module
+# from your_module import Assign, Const, Let, Var, BuiltIn
+
+
+class TestAssign(unittest.TestCase):
+    def test_assign_without_value(self):
+        assign = Assign("variable")
+        expected_result = " variable;"
+        self.assertEqual(str(assign), expected_result)
+
+    def test_assign_with_value(self):
+        assign = Assign("variable", 42)
+        expected_result = " variable = 42;"
+        self.assertEqual(str(assign), expected_result)
+
+
+class TestConst(unittest.TestCase):
+    def test_const_without_value(self):
+        const = Const("constVariable")
+        expected_result = "const constVariable;"
+        self.assertEqual(str(const), expected_result)
+
+    def test_const_with_value(self):
+        const = Const("constVariable", "hello")
+        expected_result = 'const constVariable = "hello";'
+        self.assertEqual(str(const), expected_result)
+
+
+class TestLet(unittest.TestCase):
+    def test_let_without_value(self):
+        let = Let("letVariable")
+        expected_result = "let letVariable;"
+        self.assertEqual(str(let), expected_result)
+
+    def test_let_with_value(self):
+        let = Let("letVariable", 3.14)
+        expected_result = "let letVariable = 3.14;"
+        self.assertEqual(str(let), expected_result)
+
+
+class TestVar(unittest.TestCase):
+    def test_var_without_value(self):
+        var = Var("varVariable")
+        expected_result = "var varVariable;"
+        self.assertEqual(str(var), expected_result)
+
+    def test_var_with_value(self):
+        var = Var("varVariable", True)
+        expected_result = "var varVariable = True;"
+        self.assertEqual(str(var), expected_result)
 
 
 if __name__ == "__main__":
