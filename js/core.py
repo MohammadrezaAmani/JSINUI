@@ -1,4 +1,4 @@
-class Constatant:
+class Constant:
     FalseCons = "False"
     TrueCons = "True"
     NoneCons = "None"
@@ -108,17 +108,17 @@ class BoolOp(BuiltIn):
 
 class And(BoolOp):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, Constatant.And)
+        super().__init__(obj1, obj2, Constant.And)
 
 
 class Or(BoolOp):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, Constatant.Or)
+        super().__init__(obj1, obj2, Constant.Or)
 
 
 class Not(BoolOp):
     def __init__(self, obj1=None) -> None:
-        super().__init__(obj1, op=Constatant.Not)
+        super().__init__(obj1, op=Constant.Not)
 
 
 class Comparisons(BuiltIn):
@@ -320,7 +320,7 @@ class Add(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Add,
+            Constant.Add,
         )
 
 
@@ -329,7 +329,7 @@ class Sub(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Sub,
+            Constant.Sub,
         )
 
 
@@ -338,7 +338,7 @@ class Mult(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Mult,
+            Constant.Mult,
         )
 
 
@@ -347,7 +347,7 @@ class Div(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Div,
+            Constant.Div,
         )
 
 
@@ -356,7 +356,7 @@ class FloorDiv(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.FloorDiv,
+            Constant.FloorDiv,
         )
 
 
@@ -365,7 +365,7 @@ class Mod(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Mod,
+            Constant.Mod,
         )
 
 
@@ -374,7 +374,7 @@ class Pow(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Pow,
+            Constant.Pow,
         )
 
 
@@ -383,7 +383,7 @@ class Negative(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Negative,
+            Constant.Negative,
         )
 
 
@@ -392,7 +392,7 @@ class Posetive(Op):
         super().__init__(
             obj1,
             obj2,
-            Constatant.Posetive,
+            Constant.Posetive,
         )
 
 
@@ -406,7 +406,7 @@ class LShift(BitwiseOp):
         super().__init__(
             obj1,
             obj2,
-            Constatant.LShift,
+            Constant.LShift,
         )
 
 
@@ -415,7 +415,7 @@ class RShift(BitwiseOp):
         super().__init__(
             obj1,
             obj2,
-            Constatant.RShift,
+            Constant.RShift,
         )
 
 
@@ -424,7 +424,7 @@ class BitAnd(BitwiseOp):
         super().__init__(
             obj1,
             obj2,
-            Constatant.BitAnd,
+            Constant.BitAnd,
         )
 
 
@@ -433,7 +433,7 @@ class BitOr(BitwiseOp):
         super().__init__(
             obj1,
             obj2,
-            Constatant.BitOr,
+            Constant.BitOr,
         )
 
 
@@ -442,7 +442,7 @@ class BitXor(BitwiseOp):
         super().__init__(
             obj1,
             obj2,
-            Constatant.BitXor,
+            Constant.BitXor,
         )
 
 
@@ -451,7 +451,7 @@ class BitInvert(BitwiseOp):
         super().__init__(
             obj1,
             obj2=None,
-            op=Constatant.BitInvert,
+            op=Constant.BitInvert,
         )
 
 
