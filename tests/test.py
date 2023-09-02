@@ -6,8 +6,8 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent_dir)
 from js.core import *
 
+
 class TestJs(unittest.TestCase):
-    
     def test_builtin(self):
         obj = BuiltIn()
         self.assertEqual(
@@ -27,6 +27,7 @@ class TestJs(unittest.TestCase):
         self.assertEqual(
             And(me, you).__str__(), '("me" && "you")', 'Should be: ("me" && "you")'
         )
+
     def test_Or_constant(self):
         self.assertEqual(
             And("me", "you").__str__(), '("me" || "you")', 'Should be: ("me" || "you")'
@@ -35,14 +36,20 @@ class TestJs(unittest.TestCase):
     def test_Or_variable(self):
         me = 1
         you = 2
-        self.assertEqual(
-            And(me, you).__str__(), '(1 || 2)', 'Should be: (1 || 2)'
-        )
+        self.assertEqual(Or(me, you).__str__(), "(1 || 2)", "Should be: (1 || 2)")
+
     def test_Not_variable(self):
         self.assertEqual(
-            Not(Or(1,2)).__str__(), '!((1 || 2))', 'Should be: !((1 || 2))'
+            Not(Or(1, 2)).__str__(), "!((1 || 2))", "Should be: !((1 || 2))"
         )
-
+    def test_Int_Constant(self):
+        self.assertEqual(
+            Int(1).__str__(), "1", "Should be: 1"
+        )
+    def test_str_variable(self):
+        self.assertEqual(
+            Str(1).__str__(), '"1"', "Should be: \"1\""
+        )
 
 if __name__ == "__main__":
     tect = unittest.main(exit=False)
