@@ -8,6 +8,7 @@ class Constatant:
     LicenseCons = "license"
     And = "&&"
     Or = "||"
+    Not = '!'
 
 
 class BuiltIn(object):
@@ -69,7 +70,9 @@ class BoolOp(BuiltIn):
         self.__obj2 = obj
 
     def renderClass(self):
-        return f"{self.obj1} {self.op} {self.obj2}"
+        if not self.obj2:
+            return f"{self.op}({self.obj1})"
+        return f"({str(self.obj1)} {(self.op)} {(self.obj2)})"
 
 
 class And(BoolOp):
@@ -78,9 +81,12 @@ class And(BoolOp):
 
 
 class Or(BoolOp):
-    def __init__(self, obj1=None, obj2=None, op=None) -> None:
+    def __init__(self, obj1=None, obj2=None) -> None:
         super().__init__(obj1, obj2, Constatant.Or)
 
+class Not(BoolOp):
+    def __init__(self, obj1=None) -> None:
+        super().__init__(obj1, op = Constatant.Not)
 
 if __name__ == "__main__":
-    print(And("me", "you"))
+    print(Not(And(4,2)))
