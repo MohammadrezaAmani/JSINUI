@@ -28,6 +28,16 @@ class BuiltIn(object):
         return f"{str(self.__class__.__name__)}({self.__str__()})"
 
 
+def convertType(obj):
+    #! complete this function, add more types and use it every where
+    convert = {}
+
+    if type(obj) in convert:
+        objtype = convert[type(obj)]
+        return objtype(obj)
+    return obj
+
+
 class BoolOp(BuiltIn):
     def __init__(self, obj1=None, obj2=None, op=None) -> None:
         self.obj1 = obj1
@@ -55,7 +65,7 @@ class BoolOp(BuiltIn):
         return self.__obj2
 
     @obj2.setter
-    def obj1(self, obj):
+    def obj2(self, obj):
         self.__obj2 = obj
 
     def renderClass(self):
@@ -73,5 +83,4 @@ class Or(BoolOp):
 
 
 if __name__ == "__main__":
-    obj = BuiltIn()
-    print(repr(obj))
+    print(And("me", "you"))
