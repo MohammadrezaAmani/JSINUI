@@ -31,12 +31,7 @@ class BuiltIn(object):
 
 def convertType(obj):
     #! complete this function, add more types and use it every where
-    convert = {
-        str:Str,
-        int:Int,
-        float:Float,
-        complex:Complex
-    }
+    convert = {str: Str, int: Int, float: Float, complex: Complex}
 
     if type(obj) in convert:
         objtype = convert[type(obj)]

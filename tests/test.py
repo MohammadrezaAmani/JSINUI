@@ -42,14 +42,13 @@ class TestJs(unittest.TestCase):
         self.assertEqual(
             Not(Or(1, 2)).__str__(), "!((1 || 2))", "Should be: !((1 || 2))"
         )
+
     def test_Int_Constant(self):
-        self.assertEqual(
-            Int(1).__str__(), "1", "Should be: 1"
-        )
+        self.assertEqual(Int(1).__str__(), "1", "Should be: 1")
+
     def test_str_variable(self):
-        self.assertEqual(
-            Str(1).__str__(), '"1"', "Should be: \"1\""
-        )
+        self.assertEqual(Str(1).__str__(), '"1"', 'Should be: "1"')
+
 
 if __name__ == "__main__":
     tect = unittest.main(exit=False)
