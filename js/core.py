@@ -31,7 +31,12 @@ class BuiltIn(object):
 
 def convertType(obj):
     #! complete this function, add more types and use it every where
-    convert = {}
+    convert = {
+        str:Str,
+        int:Int,
+        float:Float,
+        complex:Complex
+    }
 
     if type(obj) in convert:
         objtype = convert[type(obj)]
@@ -51,7 +56,7 @@ class BoolOp(BuiltIn):
 
     @obj1.setter
     def obj1(self, obj):
-        self.__obj1 = obj
+        self.__obj1 = convertType(obj)
 
     @property
     def op(self):
@@ -67,7 +72,7 @@ class BoolOp(BuiltIn):
 
     @obj2.setter
     def obj2(self, obj):
-        self.__obj2 = obj
+        self.__obj2 = convertType(obj)
 
     def renderClass(self):
         if not self.obj2:
@@ -102,7 +107,7 @@ class Comparisons(BuiltIn):
 
     @obj1.setter
     def obj1(self, obj):
-        self.__obj1 = obj
+        self.__obj1 = convertType(obj)
 
     @property
     def op(self):
@@ -118,7 +123,7 @@ class Comparisons(BuiltIn):
 
     @obj2.setter
     def obj2(self, obj):
-        self.__obj2 = obj
+        self.__obj2 = convertType(obj)
 
     def renderClass(self):
         return f"({str(self.obj1)} {(self.op)} {(self.obj2)})"

@@ -18,7 +18,7 @@ class TestJs(unittest.TestCase):
 
     def test_And_constant(self):
         self.assertEqual(
-            And("me", "you").__str__(), '"me" && "you"', 'Should be: "me" && "you"'
+            And("me", "you").__str__(), '("me" && "you")', '(Should be: "me" && "you")'
         )
 
     def test_And_variable(self):
@@ -30,7 +30,7 @@ class TestJs(unittest.TestCase):
 
     def test_Or_constant(self):
         self.assertEqual(
-            And("me", "you").__str__(), '("me" || "you")', 'Should be: ("me" || "you")'
+            Or("me", "you").__str__(), '("me" || "you")', 'Should be: ("me" || "you")'
         )
 
     def test_Or_variable(self):
