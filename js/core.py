@@ -8,7 +8,7 @@ class Constatant:
     LicenseCons = "license"
     And = "&&"
     Or = "||"
-    Not = '!'
+    Not = "!"
 
 
 class BuiltIn(object):
@@ -84,9 +84,10 @@ class Or(BoolOp):
     def __init__(self, obj1=None, obj2=None) -> None:
         super().__init__(obj1, obj2, Constatant.Or)
 
+
 class Not(BoolOp):
     def __init__(self, obj1=None) -> None:
-        super().__init__(obj1, op = Constatant.Not)
+        super().__init__(obj1, op=Constatant.Not)
 
 
 class Comparisons(BuiltIn):
@@ -125,71 +126,96 @@ class Comparisons(BuiltIn):
 
 class LT(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '<')
+        super().__init__(obj1, obj2, "<")
 
 
 class LTE(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '<=')
+        super().__init__(obj1, obj2, "<=")
 
 
 class GT(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '>')
+        super().__init__(obj1, obj2, ">")
 
 
 class GTE(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '>=')
+        super().__init__(obj1, obj2, ">=")
 
 
 class Eq(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '==')
+        super().__init__(obj1, obj2, "==")
 
 
 class NotEq(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '!=')
+        super().__init__(obj1, obj2, "!=")
 
 
 class Is(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '===')
+        super().__init__(obj1, obj2, "===")
 
 
 class IsNot(Comparisons):
     def __init__(self, obj1=None, obj2=None) -> None:
-        super().__init__(obj1, obj2, '!==')
+        super().__init__(obj1, obj2, "!==")
 
 
+class Type(BuiltIn):
+    def __init__(self, obj=None) -> None:
+        self.obj = obj
+
+    @property
+    def obj(self):
+        return self.__obj
+
+    @obj.setter
+    def obj(self, obj):
+        self.__obj = self.cast(obj)
+
+    def cast(self, obj):
+        return obj
+
+    def renderClass(self):
+        return f"{str(self.obj)}"
 
 
+class Int(Type, int):
+    def __init__(self, obj=None) -> None:
+        super().__init__(obj)
+
+    def cast(self, obj):
+        return int(obj)
 
 
+class Float(Type, float):
+    def __init__(self, obj=None) -> None:
+        super().__init__(obj)
+
+    def cast(self, obj):
+        return float(obj)
 
 
+class Str(Type, str):
+    def __init__(self, obj=None) -> None:
+        super().__init__(obj)
+
+    def renderClass(self):
+        if "\n" in self.obj:
+            return f"`{self.obj}`"
+        return f'"{self.obj}"'
+
+    def cast(self, obj):
+        return str(obj)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class Complex(Type):
+    def __init__(self, obj=None) -> None:
+        super().__init__(obj)
 
 
 if __name__ == "__main__":
-    print(Not(And(4,2)))
+    print(Not(And(4, 2)))
